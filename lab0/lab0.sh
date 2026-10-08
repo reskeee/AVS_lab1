@@ -57,4 +57,28 @@ echo "Ресторан Victor открывается в полдень
 Баринов лично проверяет новое меню
 Команда собирается на кухне до открытия" > opening_message
 
-chmod 
+sudo chmod 755 victor
+sudo chmod u=rwx,g=rx,o=--- victor/kitchen
+
+sudo chmod 750 victor/kitchen/molecular_station
+sudo chmod u=rw,g=r,o=--- victor/kitchen/molecular_station/foam_recipe
+sudo chmod 640 victor/kitchen/molecular_station/nitrogen_notes
+
+sudo chmod u=rwx,g=rx,o=--- victor/kitchen/hot_station
+sudo chmod 644 victor/kitchen/hot_station/senya_report
+sudo chmod u=rw,g=r,o=r victor/kitchen/hot_station/fedya_report
+
+sudo chmod 640 victor/kitchen/chef_order
+sudo chmod u=rwx,g=rx,o=rx victor/hall
+sudo chmod 664 victor/hall/reservations
+sudo chmod u=r,g=r,o=r victor/hall/guest_reviews
+
+sudo chmod 750 victor/office
+sudo chmod u=rw,g=r,o=--- victor/office/katya_schedule
+
+sudo chmod u=rwx,g=rx,o=--- experiments
+sudo chmod 600 experiments/tasting_results
+sudo chmod 700 archive_empty
+
+sudo chmod u=rw,g=r,o=r opening_message
+
