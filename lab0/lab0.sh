@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Создание структуры
 mkdir victor experiments archive_empty
 cd victor/
 mkdir kitchen hall office
@@ -7,6 +8,8 @@ cd kitchen/
 mkdir molecular_station hot_station
 cd ../..
 
+
+# Наполнение файлов
 echo "Катя готовит свекольную пену для нового блюда
 Лёва проверяет температуру перед подачей
 Баринов требует сохранить вкус продуктов
@@ -57,6 +60,8 @@ echo "Ресторан Victor открывается в полдень
 Баринов лично проверяет новое меню
 Команда собирается на кухне до открытия" > opening_message
 
+
+# Установка прав файлам
 sudo chmod 755 victor
 sudo chmod u=rwx,g=rx,o=--- victor/kitchen
 
@@ -82,3 +87,42 @@ sudo chmod 700 archive_empty
 
 sudo chmod u=rw,g=r,o=r opening_message
 
+
+# Копирование, перемещение и создание ссыллок
+cp experiments/tasting_results victor/office/successful_experiment
+cp -r victor/kitchen/molecular_station experiments/molecular_backup
+cd /workspaces/debian/lab0/experiments
+ln -s ../victor/kitchen/molecular_station/foam_recipe current_recipe # (в директории) experiments)
+ln -s /workspaces/debian/lab0/victor/kitchen kitchen_entry
+cd ..
+ln opening_message victor/kitchen/shift_order
+
+# Объединение файлов victor/kitchen/hot_station/senya_report и victor/kitchen/hot_station/fedya_report в новый файл victor/kitchen/team_report:
+cd /workspaces/debian/lab0/victor/kitchen
+touch team_report
+cat hot_station/senya_report hot_station/fedya_report > team_report
+
+cat chef_order >> ../../experiments/tasting_results
+mv victor/hall/reservations victor/office/evening_reservations
+tree
+
+
+# Поиск, фильтрация и обработка данных
+ls -lR | grep "^-" | sort -n -k5 | tail -5
+grep -rhiE 'катя|баринов' victor experiments | grep -vi 'гост' | sort -r | head -6
+grep -rli 'катя' victor/kitchen/molecular_station experiments/molecular_backup | wc -l
+cat victor/kitchen/hot_station/*_report | grep -iE 'блюд|баринов' | sort | head -1 && cat victor/kitchen/hot_station/*_report | grep -iE 'блюд|баринов' | sort | tail -1
+grep -viE 'сеня|федя' victor/kitchen/team_report | grep -i 'блюд' | sort -r | wc -w
+ls -lR | grep "^l" | sort -r -k9
+ls -liR lab0 | grep -E '^[0-9]+ -[^ ]+ +2 ' | sort -n -k1
+
+
+# Удаление
+rm experiments/tasting_results
+rm experiments/current_recipe
+rm kitchen_entry
+rm opening_message
+rm victor/kitchen/shift_order
+rm victor/kitchen/molecular_station/nitrogen_notes
+rmdir archive_empty
+rm -r experiments/molecular_backup
